@@ -10,7 +10,11 @@ app_ui <- function(request) {
     golem_add_external_resources(),
     # Your application UI logic
     fluidPage(
-      h1("ShinyTwenty")
+      h1("ShinyTwenty"),
+      # create a slider input.
+      sliderInput("slider", "Slide Me", 0,100,1),
+      # create an output called num.
+      textOutput("num")
     )
   )
 }
