@@ -2,43 +2,84 @@
 #'
 #' @param request Internal parameter for `{shiny}`.
 #'     DO NOT REMOVE.
+#' @import Twenty
+#' @import reactable
 #' @import shiny
+#' @import dplyr
+#' @import tibble
+#' @import stringr
+#' @import ggplot2
+#' @import ggrepel
 #' @noRd
-
-library(shinyMobile)
+library(devtools)
+devtools::install_github("rforbiodatascience22/Twenty")
 library(Twenty)
 
-source("R/01_load.R")
-
-
 app_ui <- function(request) {
+  shiny::tagList(
     # Leave this function for adding external resources
-    golem_add_external_resources()
-    # Your application UI logic with commas afterwards
+    golem_add_external_resources(),
+    # Your application UI logic
     fluidPage(
-      h1("West Data"),
 
-      h2("ShinyTwenty"),
-      tagList(
+      h1(" ShinyTwenty"),
+      titlePanel("Hello Shiny"),
 
-        h2("PLOT A"),
-        # create a static plot
-        plotOutput("static"),
+      p("Paper: Predicting the clinical status of human breast cancer by using gene expression profiles,
+           by Mike West, Carrie Blanchette, Holly Dressman et al."),
 
-        h2("PLOT B"),
-        plotOutput("notstatic")
+      # output Text:create general text in the ui and display using the server.
+      textOutput("text"),
 
-      # Sliders from the module as many times as you want with different names.
-      #mod_sliderText_ui("sliderText_1"),
-      #mod_sliderText_ui("sliderText_2"),
-      #mod_sliderText_ui("sliderText_3"),
-      #mod_sliderText_ui("sliderText_4")
 
-      # Create four sliders without so much code.
-      #sliderTextUI("slide_one"),
-      #sliderTextUI("slide_two"),
-      #sliderTextUI("slide_three"),
-      #sliderTextUI("slide_four")
+      # upload a file:
+      #fileInput(inputId = "upload", label = "Upload a file"),
+
+      # input: create a slider.
+      #sliderInput(inputId = "min", label = "Limit (minimum)", value = 50, min = 0, max = 100),
+
+      #  input: create an input selection criteria
+      #animals <- c("dog", "cat", "mouse", "bird", "other"),
+      #selectInput(inputId = "trousers", label = "more_trousers", animals),
+
+      # input:  Collect small amounts of text with text input.
+      #textInput(inputId ="name", label = "Name: "),
+
+      #  input: Collect more information
+      #textAreaInput(inputId ="story",label =  "Write here what you know about this dataset. ", rows = 3),
+
+      #  input: Collect numeric values
+      #numericInput(inputId ="num", label = "Enter a number: ", value = 0, min = 0, max = 30),
+
+      #  input: Collect a range of values
+      #sliderInput(inputId ="rng", label = "Range", value = c(10, 20), min = 0, max = 30),
+      # customise slider input: https://shiny.rstudio.com/articles/sliders.html
+
+      #  input: perform an action with a button
+      # actionButton(inputId = "click", label = "Click here on this button", class =  "btn-block"),
+
+      # output code : create code text in the ui and display using the server.
+      #verbatimTextOutput("code"),
+
+      # output: tables: output a static table, create code text in the ui and display using the server.
+      # tableOutput("static"),
+
+      # output: a dynamic table, create code text in the ui and display using the server.
+      #dataTableOutput("dynamic"),
+
+      # output: Table, create a reactable table rather than a still one.
+      reactableOutput("table"),
+
+      # output: Plots: display a plot from ggplot
+      #plotOutput("goodplot1", width = "400px"),
+
+      #output: Plot the manhattan plot using ggplot.
+      plotOutput("manhattan1", width = "400px"),
+
+      #output: Plot the pcs plot using ggplot.
+      sliderInput("height", "Adjust the plot height", min = 100, max = 800, value = 250),
+      sliderInput("width", "Adjust the plot width", min = 100, max = 800, value = 250),
+      plotOutput("principal", width = "400px"),
 
     )
   )
