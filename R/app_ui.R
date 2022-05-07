@@ -8,6 +8,8 @@
 library(shinyMobile)
 library(Twenty)
 
+source("R/01_load.R")
+
 
 app_ui <- function(request) {
     # Leave this function for adding external resources
