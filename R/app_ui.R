@@ -4,17 +4,28 @@
 #'     DO NOT REMOVE.
 #' @import shiny
 #' @noRd
+
+
 app_ui <- function(request) {
   tagList(
     # Leave this function for adding external resources
     golem_add_external_resources(),
-    # Your application UI logic
+    # Your application UI logic with commas afterwards
     fluidPage(
       h1("ShinyTwenty"),
-      # create a slider input.
-      sliderInput("slider", "Slide Me", 0,100,1),
-      # create an output called num.
-      textOutput("num")
+
+      # Sliders from the module as many times as you want with different names.
+      mod_sliderText_ui("sliderText_1"),
+      mod_sliderText_ui("sliderText_2"),
+      mod_sliderText_ui("sliderText_3"),
+      mod_sliderText_ui("sliderText_4")
+
+      # Create four sliders without so much code.
+      #sliderTextUI("slide_one"),
+      #sliderTextUI("slide_two"),
+      #sliderTextUI("slide_three"),
+      #sliderTextUI("slide_four")
+
     )
   )
 }

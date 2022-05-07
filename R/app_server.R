@@ -4,9 +4,12 @@
 #'     DO NOT REMOVE.
 #' @import shiny
 #' @noRd
-app_server <- function(input, output, session) {
-  # Your application server logic
+#'
 
-  # conect num to the slider.
-  output$num <- renderText(input$slider)
+app_server <- function(input, output, session) {
+  mod_sliderText_server("sliderText_1")
+
+  #callModule(sliderText,"slide_two")
+  #callModule(sliderText,"slide_three")
+  #callModule(sliderText,"slide_four")
 }
