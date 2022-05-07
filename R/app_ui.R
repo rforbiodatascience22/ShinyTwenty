@@ -5,20 +5,31 @@
 #' @import shiny
 #' @noRd
 
+library(shinyMobile)
+library(Twenty)
 
 app_ui <- function(request) {
-  tagList(
     # Leave this function for adding external resources
-    golem_add_external_resources(),
+    golem_add_external_resources()
     # Your application UI logic with commas afterwards
     fluidPage(
-      h1("ShinyTwenty"),
+      h1("West Data"),
+
+      h2("ShinyTwenty"),
+      tagList(
+
+        h2("PLOT A"),
+        # create a static plot
+        plotOutput("static"),
+
+        h2("PLOT B"),
+        plotOutput("notstatic")
 
       # Sliders from the module as many times as you want with different names.
-      mod_sliderText_ui("sliderText_1"),
-      mod_sliderText_ui("sliderText_2"),
-      mod_sliderText_ui("sliderText_3"),
-      mod_sliderText_ui("sliderText_4")
+      #mod_sliderText_ui("sliderText_1"),
+      #mod_sliderText_ui("sliderText_2"),
+      #mod_sliderText_ui("sliderText_3"),
+      #mod_sliderText_ui("sliderText_4")
 
       # Create four sliders without so much code.
       #sliderTextUI("slide_one"),
