@@ -21,6 +21,8 @@ Imports:
     forcats,
     Twenty,
     tibble,
+    cowplot,
+    factoextra
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.2

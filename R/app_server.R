@@ -10,6 +10,8 @@
 #' @import ggplot2
 #' @import ggrepel
 #' @import ggthemes
+#' @import cowplot
+#' @import factoextra
 #' @import forcats
 #' @noRd
 app_server <- function(input, output, session) {
@@ -56,16 +58,17 @@ app_server <- function(input, output, session) {
 
 
 # 01_load -------------------------------------------------------
-  devtools::install_github("rforbiodatascience22/Twenty")
+  #devtools::install_github("rforbiodatascience22/Twenty")
   #library(Twenty)
 
   # look at the available datasets in Twenty
   data(package = "Twenty")
 
-  #m <- read.csv("data/_raw/west.RData")
+  m <- load("data/_raw/west.RData")
 
   # load the original raw data.
-  m <- utils::data("west")
+  #m <- data("west")
+  #m
 
   # The data table.
   values <- tibble::as_tibble(west$x, .name_repair)

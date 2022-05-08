@@ -2,7 +2,9 @@
 
 export(run_app)
 import(Twenty)
+import(cowplot)
 import(dplyr)
+import(factoextra)
 import(forcats)
 import(ggplot2)
 import(ggrepel)
