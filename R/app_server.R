@@ -10,6 +10,7 @@
 #' @import ggplot2
 #' @import ggrepel
 #' @import ggthemes
+#' @import forcats
 #' @noRd
 app_server <- function(input, output, session) {
 
@@ -34,11 +35,23 @@ app_server <- function(input, output, session) {
   # serve a manhattan plot which can also act as an input.
   output$manhattan1<- renderPlot(manhunten, res = 96)
 
-  # serve the principal componnent plot which can also act as input.
+  # serve the principal component plot which can also act as input.
   output$principal <- renderPlot(
     width = function() input$width,
     height = function() input$height,
    res = 96,{vis2}
+  )
+
+  output$principal_bar <- renderPlot(
+    width = function() input$a_width,
+    height = function() input$a_height,
+    res = 96,{vis4}
+  )
+ # get the kmeans plot.
+  output$kmean2<- renderPlot(
+    width = function() input$the_width,
+    height = function() input$the_height,
+    res = 96,{vis5}
   )
 
 
@@ -72,7 +85,6 @@ app_server <- function(input, output, session) {
       outcome == "positive" ~ 0,
       outcome == "negative" ~ 1
     ))
-
 
   my_data_clean <- my_numerical_data
   my_data_clean

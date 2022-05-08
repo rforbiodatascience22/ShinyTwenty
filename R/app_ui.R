@@ -22,10 +22,14 @@ app_ui <- function(request) {
     # Your application UI logic
     fluidPage(
 
-      h1(" ShinyTwenty"),
-      titlePanel("Hello Shiny"),
+      # Add a theme.
+      theme = bslib::bs_theme(version = 4, bootswatch = "minty"),
 
-      p("Paper: Predicting the clinical status of human breast cancer by using gene expression profiles,
+      h1(" ShinyTwenty"),
+
+      titlePanel("R for Bio Data Science 2022"),
+
+      p(" Based on the Paper: Predicting the clinical status of human breast cancer by using gene expression profiles,
            by Mike West, Carrie Blanchette, Holly Dressman et al."),
 
       # output Text:create general text in the ui and display using the server.
@@ -67,20 +71,41 @@ app_ui <- function(request) {
       # output: a dynamic table, create code text in the ui and display using the server.
       #dataTableOutput("dynamic"),
 
-      # output: Table, create a reactable table rather than a still one.
-      reactableOutput("table"),
 
       # output: Plots: display a plot from ggplot
       #plotOutput("goodplot1", width = "400px"),
 
-      #output: Plot the manhattan plot using ggplot.
-      plotOutput("manhattan1", width = "400px"),
+      tabsetPanel(
+        tabPanel(title = "Manhattan",
+                 #output: Plot the manhattan plot using ggplot.
+                 plotOutput("manhattan1", width = "400px")
+        ),
+        tabPanel(title = "Gene Expression Table",
+                 # output: Table, create a reactable table rather than a still one
+                 reactableOutput("table")
+        ),
+        tabPanel(title = "PCA",
 
-      #output: Plot the pcs plot using ggplot.
-      sliderInput("height", "Adjust the plot height", min = 100, max = 800, value = 250),
-      sliderInput("width", "Adjust the plot width", min = 100, max = 800, value = 250),
-      plotOutput("principal", width = "400px"),
-
+                  ##output: Plot the pcs plot using ggplot.
+                  sliderInput("height", "Adjust the plot height", min = 100, max = 800, value = 250),
+                  sliderInput("width", "Adjust the plot width", min = 100, max = 800, value = 250),
+                  plotOutput("principal", width = "400px"),
+                 br(),
+                 br(),
+                 br(),
+                 br(),
+                 br(),
+                 sliderInput("a_height", "Adjust the plot height", min = 100, max = 800, value = 250),
+                 sliderInput("a_width", "Adjust the plot width", min = 100, max = 800, value = 250),
+                 plotOutput("principal_bar", width = "400px"),
+        ),
+        tabPanel(title = "K-Means",
+                 ##output: Plot the kmeans plot using ggplot.
+                 sliderInput("the_height", "Adjust the plot height", min = 100, max = 800, value = 250),
+                 sliderInput("the_width", "Adjust the plot width", min = 100, max = 800, value = 250),
+                 plotOutput("kmean2", width = "400px")
+        ),
+      )
     )
   )
 }

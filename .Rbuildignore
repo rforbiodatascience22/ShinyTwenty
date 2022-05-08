@@ -5,3 +5,6 @@ dev_history.R
 ^dev$
 $run_dev.*
 ^\.gitlab-ci\.yml$
+^LICENSE\.md$
+^CODE_OF_CONDUCT\.md$
+^README\.Rmd$

@@ -3,6 +3,7 @@
 export(run_app)
 import(Twenty)
 import(dplyr)
+import(forcats)
 import(ggplot2)
 import(ggrepel)
 import(ggthemes)
