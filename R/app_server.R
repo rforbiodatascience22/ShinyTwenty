@@ -17,10 +17,10 @@
 app_server <- function(input, output, session) {
 
   # serve the text
-  #output$text <- renderText({" Hello. " })
+  # output$text <- renderText({" Hello. " })
 
   # serve the text called code
-  #output$code <- renderPrint({summary(1:10)})
+  # output$code <- renderPrint({summary(1:10)})
 
   # serve the static id to render a static table.
   # output$static <- renderTable(head(mtcars))
@@ -29,37 +29,48 @@ app_server <- function(input, output, session) {
   # output$dynamic <- renderDataTable(mtcars, options = list(pageLength = 4))
 
   # serve a reactable table using the react library.(((mtcars))) ***
-  output$table <- renderReactable({reactable(my_data_clean_aug,  defaultPageSize = 5,  bordered = TRUE)})
+  output$table <- renderReactable({
+    reactable(my_data_clean_aug, defaultPageSize = 5, bordered = TRUE)
+  })
 
   # serve a goodplot which can also act as an input.
-  #output$goodplot <- renderPlot(plot(1:5), res = 96)
+  # output$goodplot <- renderPlot(plot(1:5), res = 96)
 
   # serve a manhattan plot which can also act as an input.
-  output$manhattan1<- renderPlot(manhunten, res = 96)
+  output$manhattan1 <- renderPlot(manhunten, res = 96)
 
   # serve the principal component plot which can also act as input.
   output$principal <- renderPlot(
     width = function() input$width,
     height = function() input$height,
-   res = 96,{vis2}
+    res = 96,
+    {
+      vis2
+    }
   )
 
   output$principal_bar <- renderPlot(
     width = function() input$a_width,
     height = function() input$a_height,
-    res = 96,{vis4}
+    res = 96,
+    {
+      vis4
+    }
   )
- # get the kmeans plot.
-  output$kmean2<- renderPlot(
+  # get the kmeans plot.
+  output$kmean2 <- renderPlot(
     width = function() input$the_width,
     height = function() input$the_height,
-    res = 96,{vis5}
+    res = 96,
+    {
+      vis5
+    }
   )
 
 
-# 01_load -------------------------------------------------------
-  #devtools::install_github("rforbiodatascience22/Twenty")
-  #library(Twenty)
+  # 01_load -------------------------------------------------------
+  # devtools::install_github("rforbiodatascience22/Twenty")
+  # library(Twenty)
 
   # look at the available datasets in Twenty
   data(package = "Twenty")
@@ -67,8 +78,8 @@ app_server <- function(input, output, session) {
   m <- load("data/_raw/west.RData")
 
   # load the original raw data.
-  #m <- data("west")
-  #m
+  # m <- data("west")
+  # m
 
   # The data table.
   values <- tibble::as_tibble(west$x, .name_repair)
@@ -86,9 +97,9 @@ app_server <- function(input, output, session) {
 
   my_raw_data_renamed
 
-# 02_clean --------------------------------------------------------
+  # 02_clean --------------------------------------------------------
 
-  my_data <-my_raw_data_renamed
+  my_data <- my_raw_data_renamed
 
   my_numerical_data <- my_data %>%
     dplyr::mutate(value = dplyr::case_when(
@@ -99,7 +110,7 @@ app_server <- function(input, output, session) {
   my_data_clean <- my_numerical_data
   my_data_clean
 
-# 03_augment ---------------------------------------------------------
+  # 03_augment ---------------------------------------------------------
 
   gene_data_long <- Twenty::convert_to_long(my_data_clean)
   gene_data_long
@@ -111,10 +122,10 @@ app_server <- function(input, output, session) {
   # Fit logistic regression models on the data.
   west_data_nested_mod <- west_data_nested %>%
     dplyr::mutate(model = purrr::map(data, ~ glm(value ~ expression_level,
-                                   data = .,
-                                   family = binomial(link = "logit")
+      data = .,
+      family = binomial(link = "logit")
     )))
-  #west_data_nested_mod
+  # west_data_nested_mod
 
   # Extract some information from each of the models.
   west_data_nested_sum <- west_data_nested_mod %>%
@@ -127,7 +138,7 @@ app_server <- function(input, output, session) {
   west_data_long_nested <- west_data_nested_sum %>%
     dplyr::filter(stringr::str_detect(term, "expression_level"))
 
-  #. 6 Indicator variable
+  # . 6 Indicator variable
   gene_expr_data_long_nested <- west_data_long_nested %>%
     dplyr::mutate(
       identified_as = dplyr::case_when(
@@ -144,7 +155,7 @@ app_server <- function(input, output, session) {
     )
 
   # 6.5 Select only the data with the lowest p values ( First only the significant genes )
-  gene_expr_data_long_nested  <- gene_expr_data_long_nested %>%
+  gene_expr_data_long_nested <- gene_expr_data_long_nested %>%
     dplyr::filter(identified_as == "Significant") %>%
     dplyr::arrange(p.value) %>%
     # Get the first 100 rows.
@@ -152,11 +163,12 @@ app_server <- function(input, output, session) {
 
 
 
- manhunten <- gene_expr_data_long_nested %>%
-    ggplot2::ggplot(mapping = ggplot2::aes(x = Gene, y = neg_log10_p,
-    colour = identified_as,
-    label = gene_label
-  )) +
+  manhunten <- gene_expr_data_long_nested %>%
+    ggplot2::ggplot(mapping = ggplot2::aes(
+      x = Gene, y = neg_log10_p,
+      colour = identified_as,
+      label = gene_label
+    )) +
     ggplot2::geom_point(
       alpha = 0.5,
       size = 2
@@ -184,12 +196,14 @@ app_server <- function(input, output, session) {
 
 
   my_data_clean_aug <- gene_expr_data_long_nested %>%
-    dplyr::select("Gene", "term", "estimate", "std.error", "statistic",
-           "p.value", "conf.low", "conf.high")
+    dplyr::select(
+      "Gene", "term", "estimate", "std.error", "statistic",
+      "p.value", "conf.low", "conf.high"
+    )
 
   my_data_clean_aug
 
-# 04_analysis ---------------------------------------------------------
+  # 04_analysis ---------------------------------------------------------
 
   west_data_long_nested <- my_data_clean_aug
   west_data_long_nested
@@ -213,24 +227,25 @@ app_server <- function(input, output, session) {
 
   aug_dat_plot
 
-  #____________________________________________________#
+  # ____________________________________________________#
 
-  vis2 <-  ggplot2::ggplot(
+  vis2 <- ggplot2::ggplot(
     data = aug_dat_plot,
-    mapping = aes(x = .fittedPC4, y = .fittedPC1,
-                  shape = factor(value),
-                  colour = factor(value),
-                  label = .rownames)
+    mapping = aes(
+      x = .fittedPC4, y = .fittedPC1,
+      shape = factor(value),
+      colour = factor(value),
+      label = .rownames
+    )
   ) +
     # make a scatter plot
     ggplot2::geom_point(size = 3, alpha = 0.8, position = "jitter") +
-
     ggrepel::geom_label_repel(
       mapping = aes(label = .rownames),
       hjust = 1, nudge_x = -0.02,
       max.overlaps = 10,
       color = "#904C2F"
-    )+
+    ) +
     # edit the legend title and contents.
     ggplot2::scale_fill_discrete(name = "value", labels = c("0", "1")) +
 
@@ -254,7 +269,8 @@ app_server <- function(input, output, session) {
     ggthemes::scale_colour_excel_new() +
     ggplot2::labs(
       title = "Principal Components Analysis",
-      subtitle = "Explained Variance for each Principal Component")
+      subtitle = "Explained Variance for each Principal Component"
+    )
 
   vis2
 
@@ -297,13 +313,13 @@ app_server <- function(input, output, session) {
     )
 
   vis3
-  #Principal Component Table. -------------------------------------------------------
+  # Principal Component Table. -------------------------------------------------------
 
-    # Get all rows and their principal components.
+  # Get all rows and their principal components.
 
-    # pca_fit %>% tidy("pcs")
-    # or alternatively...
-    pca_fit %>%
+  # pca_fit %>% tidy("pcs")
+  # or alternatively...
+  pca_fit %>%
     broom::tidy(matrix = "eigenvalues") %>%
     dplyr::mutate(percentage = percent * 100)
 
@@ -341,9 +357,10 @@ app_server <- function(input, output, session) {
       x = "The Principal Component",
       title = " ",
       subtitle = "Title: Scree Plot",
-      caption = " ")
+      caption = " "
+    )
 
-# 05_analysis ii ---------------------------------------------------------
+  # 05_analysis ii ---------------------------------------------------------
   # Model data
   # Visualise data ----------------------------------------------------------
 
@@ -364,15 +381,16 @@ app_server <- function(input, output, session) {
 
   # plot the clusters.
   vis5 <-
-    ggplot2::ggplot(data = aug_kmean_plot,
-
-           mapping = aes(x = gene_132, y = gene_117, shape = .cluster, color = .cluster, fill = .cluster)) +
+    ggplot2::ggplot(
+      data = aug_kmean_plot,
+      mapping = aes(x = gene_132, y = gene_117, shape = .cluster, color = .cluster, fill = .cluster)
+    ) +
 
     # create a scatter plot.
     ggplot2::geom_point(colour = "darkblue", pch = 21, size = 6, alpha = 0.3) +
 
     # Add a colour from ggthemes.
-    #scale_fill_discrete() +
+    # scale_fill_discrete() +
     ggplot2::scale_fill_manual(values = c("chocolate1", "seagreen3", "midnightblue", "plum")) +
     # scale_color_manual(values = c("#00AFBB", "#E7B800", "#FC4E07"))
 
@@ -380,7 +398,7 @@ app_server <- function(input, output, session) {
     stat_ellipse(type = "norm", linetype = 1, geom = "polygon", level = 0.8, alpha = 0.1) +
     ggplot2::labs(
       title = "KMeans Cluster Plot"
-    )+
+    ) +
     # Change the theme.
     cowplot::theme_minimal_grid()
 
@@ -407,20 +425,15 @@ app_server <- function(input, output, session) {
 
   # 6.
   vis7 <- factoextra::fviz_cluster(kclust,
-                       data = west_data_wide,
-                       palette = c("#00AFBB", "#E7B800", "#FC4E07"),
-                       main = "K Means Cluster Plot for West Data",
-                       ellipse.type = "euclid",
-                       # star.plot = TRUE,
-                       repel = TRUE,
-                       # Avoid label over plotting
-                       ggtheme = theme_minimal()
+    data = west_data_wide,
+    palette = c("#00AFBB", "#E7B800", "#FC4E07"),
+    main = "K Means Cluster Plot for West Data",
+    ellipse.type = "euclid",
+    # star.plot = TRUE,
+    repel = TRUE,
+    # Avoid label over plotting
+    ggtheme = theme_minimal()
   )
 
   vis7
-
-
 }
-
-
-
