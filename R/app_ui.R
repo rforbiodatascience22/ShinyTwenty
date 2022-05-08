@@ -11,7 +11,6 @@
 #' @import ggplot2
 #' @import ggrepel
 #' @noRd
-library(devtools)
 devtools::install_github("rforbiodatascience22/Twenty")
 library(Twenty)
 
