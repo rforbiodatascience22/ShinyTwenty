@@ -56,9 +56,16 @@ app_server <- function(input, output, session) {
 
 
 # 01_load -------------------------------------------------------
+  devtools::install_github("rforbiodatascience22/Twenty")
+  #library(Twenty)
+
+  # look at the available datasets in Twenty
+  data(package = "Twenty")
+
+  #m <- read.csv("data/_raw/west.RData")
 
   # load the original raw data.
-  m <- data("west")
+  m <- utils::data("west")
 
   # The data table.
   values <- tibble::as_tibble(west$x, .name_repair)
@@ -340,7 +347,7 @@ app_server <- function(input, output, session) {
   # Perform K means clustering on two selected genes.
   kclust <- west_data_wide %>%
     dplyr::select(gene_132, gene_117) %>%
-    kmeans(centers = 2, algorithm = "Hartigan-Wong")
+    stats::kmeans(centers = 2, algorithm = "Hartigan-Wong")
 
   kclust
 

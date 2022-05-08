@@ -11,8 +11,8 @@
 #' @import ggplot2
 #' @import ggrepel
 #' @noRd
-devtools::install_github("rforbiodatascience22/Twenty")
-library(Twenty)
+#devtools::install_github("rforbiodatascience22/Twenty")
+#library(Twenty)
 
 app_ui <- function(request) {
   shiny::tagList(
